@@ -1,7 +1,7 @@
 chrome.action.onClicked.addListener((tab) => {
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    function: toggleBlur
+    func: toggleBlur
   });
 });
 
@@ -11,6 +11,12 @@ function toggleBlur() {
   if (existingOverlay) {
     existingOverlay.remove();
   } else {
+    // Wait for body to be available
+    if (!document.body) {
+      console.error('Page body not yet loaded');
+      return;
+    }
+    
     const overlay = document.createElement('div');
     overlay.id = 'blur-extension-overlay';
     overlay.style.position = 'fixed';
